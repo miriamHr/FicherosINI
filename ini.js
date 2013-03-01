@@ -1,49 +1,51 @@
 "use ______"; // Use ECMAScript 5 strict mode in browsers that support it
 
-$(document)._____(function() {
-   $("#fileinput").______(calculate);
+$(document).ready(function() {
+   $("#fileinput").change(calculate);
 });
 
 function calculate(evt) {
   var f = evt.target.files[0]; 
 
   if (f) {
-    var r = new __________();
+    var r = new FileReader();
     r.onload = function(e) { 
-      var contents = e.target.______;
+      var contents = e.target.result;
       
       var tokens = lexer(contents);
       var pretty = tokensToString(tokens);
       
       out.className = 'unhidden';
-      initialinput._________ = contents;
-      finaloutput._________ = pretty;
+      initialinput.innerHTML = contents;
+      finaloutput.innerHTML = pretty;
     }
-    r.__________(f); // Leer como texto
+    r.readAsText(f); // Leer como texto
   } else { 
     alert("Failed to load file");
   }
 }
 
-var temp = '<li> <span class = "<%= ______ %>"> <%= _ %> </span>\n';
+var temp = '<li> <span class = "<%= t.type %>"> <%= s %> </span>\n';// tipo de token y salida de s
+//%= codigo javascrip = evalua e inserta % evalua
 
 function tokensToString(tokens) {
    var r = '';
    for(var i in tokens) {
      var t = tokens[i];
-     var s = JSON.stringify(t, undefined, 2);
-     s = _.template(temp, {t: t, s: s});
+     var s = JSON.stringify(t, undefined, 2); //objeto que queremos convertir a cadena,2 significa sangrado(value[,replacer[,space]])
+     s = _.template(temp, {t: t, s: s});//argumentos 1º propio template,2º claves del objeto
+     //t = token , s=match
      r += s;
    }
    return '<ol>\n'+r+'</ol>';
 }
 
 function lexer(input) {
-  var blanks         = /^___/;
-  var iniheader      = /^________________/;
-  var comments       = /^________/;
-  var nameEqualValue = /^________________________/;
-  var any            = /^_______/;
+  var blanks         = /^\S+/;
+  var iniheader      = /^|[([^\]\r\r]+)\]/;
+  var comments       = /^[;#](.*)/;
+  var nameEqualValue = /^([^=;\r\n]+)=([^;\r\n]*)/;
+  var any            = /^(.|\n)+/;
 
   var out = [];
   var m = null;
