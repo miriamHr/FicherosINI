@@ -1,4 +1,4 @@
-"use ______"; // Use ECMAScript 5 strict mode in browsers that support it
+"use strict"; // Use ECMAScript 5 strict mode in browsers that support it
 
 $(document).ready(function() {
    $("#fileinput").change(calculate);
@@ -51,24 +51,24 @@ function lexer(input) {
   var m = null;
 
   while (input != '') {
-    if (m = blanks.____(input)) {
-      input = input.substr(m.index+___________);
-      out.push({ type : ________, match: _ });
+    if (m = blanks.exec(input)) {
+      input = input.substr(m.index+m.lastIndex);
+      out.push({ type :input, match:m});
     }
     else if (m = iniheader.exec(input)) {
-      input = input.substr(___________________);
-      _______________________________________ // avanzemos en input
+      input = input.substr(m.index+m.lastIndex);
+      input.lastIndex; // avanzemos en input
     }
     else if (m = comments.exec(input)) {
-      input = input.substr(___________________);
-      _________________________________________
+      input = input.substr(m.index+m.lastIndex);
+      input.lastIndex;
     }
     else if (m = nameEqualValue.exec(input)) {
-      input = input.substr(___________________);
-      _______________________________________________
+      input = input.substr(m.index+m.lastIndex);
+      input.lastIndex;
     }
     else if (m = any.exec(input)) {
-      _______________________________________
+      input.lastIndex;
       input = '';
     }
     else {
